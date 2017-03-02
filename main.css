@@ -61,13 +61,42 @@ h1 {
   border-radius: 15px;
 }
 
+.prev-next-btns {
+  width: 100%;
+  margin: 20px auto;
+  display: none;
+}
+
+.prev-next-btns button {
+  display: inline-block;
+  width: 50%;
+  height: 30px;
+  background: none;
+  border: 1px solid #bbb;
+  color: #000;
+}
+
+#prev-btn {
+  border-right: 0;
+  border-radius: 5px 0 0 5px;
+}
+
+#next-btn {
+  border-radius: 0 5px 5px 0;
+}
+
+#prev-btn.disabled, #next-btn.disabled {
+  background: #ddd;
+  color: #777;
+}
+
 @media only screen and (max-width: 680px) {
   .search-results img {
     width: 100%;
   }
 
   .search-results {
-    padding: 0 10px;
+    padding: 0;
   }
 
   .form-style {
