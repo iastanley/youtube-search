@@ -13,7 +13,8 @@ $(document).ready(function(){
       data: {
         part: 'snippet',
         key: 'AIzaSyCbOY5vCwchBe7kOR4tQ0APZfVuSpLdEHE',
-        q: searchTerm
+        q: searchTerm,
+        maxResults: 6
       },
       datatype: 'json',
       type: 'GET',
@@ -27,9 +28,12 @@ $(document).ready(function(){
     console.log(data);
     var resultsHTML = '';
     var videoURL = '';
+    var videoId = '';
     for(var i = 0; i < data.items.length; i++){
       videoURL = data.items[i].snippet.thumbnails.medium.url;
-      resultsHTML += '<a href="#"><img src="' + videoURL + '"></a>';
+      videoId = data.items[i].id.videoId;
+      resultsHTML += '<a target="_blank" href="https://youtu.be/'+ videoId +'">';
+      resultsHTML += '<img src="' + videoURL + '"></a>';
     }
     $('#js-search-results').html(resultsHTML);
   }

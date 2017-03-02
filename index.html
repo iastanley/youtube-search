@@ -3,15 +3,21 @@
   <head>
     <meta charset="utf-8">
     <title>Youtube Search</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Normalize Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.css" rel="stylesheet">
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" type="text/css" href="main.css">
   </head>
   <body>
-    <h1>Search Youtube</h1>
-      <form action="#" id="js-search-form">
-        <input type="text" class="js-query">
-        <button type="submit">Search</button>
+    <header>
+      <h1>Search Youtube</h1>
+    </header>
+      <form action="#" id="js-search-form" class="form-style">
+        <input type="text" class="js-query" required><button type="submit">Search</button>
       </form>
 
-      <div id="js-search-results">
+      <div id="js-search-results" class="search-results">
 
       </div>
 
