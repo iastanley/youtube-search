@@ -1,16 +1,15 @@
 $(document).ready(function(){
   var YOUTUBE_SEARCH_LIST_ENDPOINT = 'https://www.googleapis.com/youtube/v3/search';
-  var state = {
-    prevToken: '',
-    nextToken: 0
-  };
+  //global search term variable
+  var searchTerm = '';
 
   //Make ajax request on form submit
+  //this is the entry point function to the whole app
   formHandler();
 
   /********FUNCTIONS********/
 
-  //Making AJAX request
+  //Making AJAX request based on searchTerm
   function getDataFromSearch(searchTerm, callback) {
     var settings = {
       url: YOUTUBE_SEARCH_LIST_ENDPOINT,
@@ -27,12 +26,14 @@ $(document).ready(function(){
     $.ajax(settings);
   }
 
-  function getDataFromPage(token, callback) {
+  //Making AJAX request based on searchTerm and pageToken
+  function getDataFromPage(searchTerm, token, callback) {
     var settings = {
       url: YOUTUBE_SEARCH_LIST_ENDPOINT,
       data: {
         part: 'snippet',
         key: 'AIzaSyCbOY5vCwchBe7kOR4tQ0APZfVuSpLdEHE',
+        q: searchTerm,
         maxResults: 6,
         pageToken: token
       },
@@ -41,15 +42,6 @@ $(document).ready(function(){
       success: callback
     }
     $.ajax(settings);
-  }
-
-  //ask question about this
-  function storePageData(data) {
-    var prev = data.prevPageToken;
-    var next = data.nextPageToken;
-    state.prevToken = prev;
-    state.nextToken = next;
-    console.log(state.nextToken);
   }
 
   //Render return data object to html
@@ -65,10 +57,12 @@ $(document).ready(function(){
       resultsHTML += '<img src="' + videoURL + '"></a>';
     }
     $('#js-search-results').html(resultsHTML);
-    navButtonHandler(data);
-    console.log(data);
+    //remove event listener to avoid multiple event listeners
+    $('#js-search-form').off('click', '**');
+    navButtonHandler(searchTerm, data);
   }
 
+  //applies disabled style to buttons based on pageToken
   function showNavButtons(data){
     //show navigation buttons
     $('.prev-next-btns').show();
@@ -87,17 +81,17 @@ $(document).ready(function(){
   }
 
   //navigation button handling
-  function navButtonHandler(data){
+  function navButtonHandler(searchTerm, data){
     //next button
     if (data.nextPageToken) {
       $('#js-search-form').on('click', '#next-btn', function(){
-        getDataFromPage(data.nextPageToken, showApiData);
+        getDataFromPage(searchTerm, data.nextPageToken, showApiData);
       });
     }
     //previous button
     if (data.prevPageToken) {
       $('#js-search-form').on('click', '#prev-btn', function(){
-        getDataFromPage(data.prevPageToken, showApiData);
+        getDataFromPage(searchTerm, data.prevPageToken, showApiData);
       });
     }
   }
@@ -106,11 +100,9 @@ $(document).ready(function(){
   function formHandler() {
     $('#js-search-form').submit(function(event){
       event.preventDefault();
-
       //get input from user
-      var query = $(this).find('.js-query').val();
-      getDataFromSearch(query, showApiData);
-      navButtonHandler();
+      searchTerm = $(this).find('.js-query').val();
+      getDataFromSearch(searchTerm, showApiData);
     });
   }
 
